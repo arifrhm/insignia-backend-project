@@ -1,0 +1,80 @@
+// schema.prisma
+
+model User {
+  id            String      @id @default(auto()) @map("_id") @test.Ignore
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  lastActivityAt DateTime?
+  email         String      @unique
+  emailVerified DateTime?
+  name          String
+  password      String
+  workspaceId   String
+  role          UserRoleEnum
+  sessions      Session[]
+  accounts      Account[]
+  apiTokens     ApiToken[]
+  workspace     Workspace    @relation(fields: [workspaceId], references: [id])
+}
+
+model Session {
+  id        String   @id @default(auto()) @map("_id") @test.Ignore
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // Define other fields for the Session model
+}
+
+model Account {
+  id        String   @id @default(auto()) @map("_id") @test.Ignore
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // Define other fields for the Account model
+}
+
+model ApiToken {
+  id        String   @id @default(auto()) @map("_id") @test.Ignore
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // Define other fields for the ApiToken model
+}
+
+model Contact {
+  id          String       @id @default(auto()) @map("_id") @test.Ignore
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  workspaceId String
+  name        String
+  phoneNumber String
+  email       String
+  address     String
+  contactList ContactList[]
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id])
+}
+
+model ContactList {
+  id             String      @id @default(auto()) @map("_id") @test.Ignore
+  contactGroupId String
+  contactId      String
+  contactGroup   ContactGroup @relation(fields: [contactGroupId], references: [id])
+  contact        Contact      @relation(fields: [contactId], references: [id])
+}
+
+model ContactGroup {
+  id          String      @id @default(auto()) @map("_id") @test.Ignore
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  name        String
+  description String
+  contactList ContactList[]
+}
+
+enum UserRoleEnum {
+  // Define your user roles here
+}
+
+model Workspace {
+  id      String   @id @default(auto()) @map("_id") @test.Ignore
+  // Define other fields for the Workspace model
+}
+
+// Define any other models and relationships as needed
